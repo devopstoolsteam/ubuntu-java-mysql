@@ -5,7 +5,7 @@
 # Use ubuntu:16.04 as base image
 FROM ubuntu:16.04
 
-MAINTAINER Hari Krishna Ganji <dostiharise@gmail.com>
+MAINTAINER Nagireddy Guduru <dostiharise@gmail.com>
 
 # Install essentials
 RUN \
@@ -34,15 +34,42 @@ RUN \
     apt-get install -y mysql-server mysql-client && \
     rm -rf /var/lib/apt/lists/*
 
-# Install maven
+# Install apache2
 RUN \
     apt-get update && \
-    apt-get install -y maven && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y apache2
+    
+# Install tomcat7
+RUN \
+    apt-get update && \
+    apt-get install -y wget
 
-#Install AWS CLI
 RUN \
-    apt-get update && \
-    apt-get install -y python-pip groff && \
-    pip install awscli && \
-    rm -rf /var/lib/apt/lists/*
+    wget http://www-eu.apache.org/dist/tomcat/tomcat-7/v7.0.85/bin/apache-tomcat-7.0.85.tar.gz && \
+    tar xzf apache-tomcat-7.0.85.tar.gz && \
+    mv apache-tomcat-7.0.85 /usr/local/tomcat7 && \
+    cd /usr/local/tomcat7 && \
+    ./bin/startup.sh
+    
+# DB dump  
+ADD dratool_Schema.sql /etc/mysql/dratool_Schema.sql
+
+# Add Warfile in tomcat 
+ADD DigitalReadinessAssessmentTool.war /usr/local/tomcat/webapps/
+
+#Place the External Property file 
+ADD application.properties /usr/local/tomcat7/
+ADD application.properties /usr/local/tomcat7/conf/
+
+# UI code 
+#Copy the build into htdocs
+COPY DigitalReadinessAssessmentTool_BUILD/ /var/www/html/
+
+#copy httpd.conf file 
+#COPY apache2.conf /etc/apache2/apache2.conf
+#COPY httpd.conf /usr/local/apache2/conf/httpd.conf
+
+    
+    
+
+
