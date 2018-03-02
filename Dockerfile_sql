@@ -1,0 +1,8 @@
+FROM mysql:5.7
+
+ADD dratool.sql /docker-entrypoint-initdb.d
+
+ADD dratool_Schema.sql /etc/mysql/dratool_Schema.sql
+
+
+EXPOSE 3306
