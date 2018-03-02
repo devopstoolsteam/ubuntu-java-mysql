@@ -68,7 +68,7 @@ COPY DigitalReadinessAssessmentTool_BUILD/ /var/www/html/
 #copy httpd.conf file 
 #COPY apache2.conf /etc/apache2/apache2.conf
 #COPY httpd.conf /usr/local/apache2/conf/httpd.conf
-
+CMD ["./bin/startup.sh"]
     
     
 
